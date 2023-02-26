@@ -7,21 +7,49 @@ def consistency(grid, N, max_steps):
     # P_i,j,k,n - is a propositional variable which represents whether cell (i,j) is occupied by number k at teh n^{th} step
     # P is represented by grid[][][][]
 
-    # Checks (for every step n, for every entry k, sum P_i,j,k,n = 1 => each entry occurs somewhere on the board exactly once)
-    for step in range(max_steps):
+    for step in range(max_steps+1):
+        # Checks (for every step n, for every entry k, sum P_i,j,k,n = 1 => each entry occurs somewhere on the board exactly once)
         for entry in range(N*N):
             constraints.append(sum_eq_one([grid[i][j][entry][step] for i in range(N) for j in range(N)]))
 
-    print(constraints)
-
-    # Checks (for every step n, for every cell in the grid (row,column), sum P_row,column,k,n = 1 => only one entry occurs at each position (i,j) in every step)
-    # for step in range(max_steps):
-    #     for row in range(N):
-    #         for column in range(N):
-    #             constraints.append(sum_eq_one(grid[row][column][entry][step] for entry in range(N)))
-
+        # Checks (for every step n, for every cell in the grid (row,column), sum P_row,column,k,n = 1 => only one entry occurs at each position (i,j) in every step)
+        for row in range(N):
+            for column in range(N):
+                constraints.append(sum_eq_one(grid[row][column][entry][step] for entry in range(N*N)))
+    
+    # print(constraints)
     return And(constraints)
 
-'''Creates the clauses for the Psedo Boolean Constarints for p_1 + p2_ ... p_n = k'''
+'''Creates the clauses for the Pseudo Boolean Constarints for p_1 + p2_ ... p_n = k'''
 def sum_eq_one(vars):
     return PbEq(tuple([(i,1) for i in vars]), 1)
+
+'''Creates clauses for constraining the valid moves at each step'''
+def move_constraints(grid,move, N, max_steps):
+    constraints = []
+
+    # Adds the constraints sum right_i_step + left_i_step + up_i_step + dpown_i_n = 1 => only one step moving one row/ column left/right/up/down should be done in a move
+    for i in range(max_steps):
+        constraints.append(sum_eq_one(move[i]))
+    # print(constraints)
+
+    # Adding constraints for if a move is chosen from amoung right, left .. - ensuring the validity of the next state
+    # TODO
+
+    return (And(constraints))
+
+def goal_constraints(grid, N, max_steps):
+    constraints = []
+
+    for step_count in range(max_steps+1): # step_count also includes 0 => the starting configuration is correct
+        finish_at_step_i = []
+        element = 0
+        # Checks whether, at a certain step, the correct configuration is met - 1 is at (0,0), 2 is at (0,1) ...
+        for row in range(N):
+            for column in range(N):
+                finish_at_step_i.append(grid[row][column][element][step_count])
+                element+=1
+
+        constraints.append(And(finish_at_step_i))
+
+    return(Or(constraints))
