@@ -34,19 +34,43 @@ def move_constraints(grid,moves, N, max_steps):
     # print(constraints)
 
     # Adding constraints for if a move is chosen from amoung right, left .. - ensuring the validity of the next state
-    for step in moves:
+    for step in moves[:-1]: # Skip the last step - No move possible from the last step
         for move in step:
+            actual_move = []
             if str(move)[:-4] == 'right':
-                pass
+                for column in range(N):
+                    for element in range(N*N):
+                        for row in range(N):
+                            if row == str(move)[-3]:
+                                actual_move.append(Implies(grid[row][column][element][str(move)[-1]], grid[row][(column+1)%N][element][str(move)[-1]+1]))
+                            else:
+                                actual_move.append(grid[row][column][element][str(move)[-1]] == grid[row][(column+1)%N][element][str(move)[-1]+1])
             elif str(move)[:-4] == 'left':
-                pass
+                for column in range(N):
+                    for element in range(N*N):
+                        for row in range(N):
+                            if row == str(move)[-3]:
+                                actual_move.append(Implies(grid[row][column][element][str(move)[-1]], grid[row][(column-1)%N][element][str(move)[-1]+1]))
+                            else:
+                                actual_move.append(grid[row][column][element][str(move)[-1]] == grid[row][(column-1)%N][element][str(move)[-1]+1])
             elif str(move)[:-4] == 'up':
-                pass
+                for row in range(N):
+                    for element in range(N*N):
+                        for column in range(N):
+                            if column == str(move)[-3]:
+                                actual_move.append(Implies(grid[row][column][element][str(move)[-1]], grid[(row+1)%N][column][element][str(move)[-1]+1]))
+                            else:
+                                actual_move.append(grid[row][column][element][str(move)[-1]] == grid[(row+1)%N][column][element][str(move)[-1]+1])
             elif str(move)[:-4] == 'down':
-                pass
-
-    
-
+                for row in range(N):
+                    for element in range(N*N):
+                        for column in range(N):
+                            if column == str(move)[-3]:
+                                actual_move.append(Implies(grid[row][column][element][str(move)[-1]], grid[(row-1)%N][column][element][str(move)[-1]+1]))
+                            else:
+                                actual_move.append(grid[row][column][element][str(move)[-1]] == grid[(row-1)%N][column][element][str(move)[-1]+1])
+            # Taking an AND of all the conditions to be taken care of in ONE MOVE
+            constraints.append(Implies(move,And(actual_move)))
     return (And(constraints))
 
 def goal_constraints(grid, N, max_steps):
