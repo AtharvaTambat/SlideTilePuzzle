@@ -39,12 +39,12 @@ with open(file) as f:
 	# Adding consistency constraints for T steps
 	constraints.append(consistency(grid,n,T))
 
-	# # Adding constraints for valid moves
+	# Adding constraints for valid moves
 	constraints.append(move_constraints(grid, move, n, T))
 
 	# Adding goal constarints 
 	constraints.append(goal_constraints(grid,n,T))
-	# print(constraints)
+	print(constraints)
  
 # Set s to the required formula
 s = Solver()
@@ -54,7 +54,7 @@ x = s.check()
 print(x)
 if x == sat:
 	m = s.model()
-	# print("The satisfying model:")
-	# print(m)
+	print("The satisfying model:")
+	print(m)
 	
 # Output the moves

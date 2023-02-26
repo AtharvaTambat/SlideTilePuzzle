@@ -33,42 +33,44 @@ def move_constraints(grid,moves, N, max_steps):
         constraints.append(sum_eq_one(moves[i]))
     # print(constraints)
 
+    # Enforcing move constraints between step 0 (initial state) and the first state (after one operation)
+
     # Adding constraints for if a move is chosen from amoung right, left .. - ensuring the validity of the next state
-    for step in moves[:-1]: # Skip the last step - No move possible from the last step
+    for step in moves: # Skip the last step - No move possible from the last step
         for move in step:
             actual_move = []
             if str(move)[:-4] == 'right':
                 for column in range(N):
                     for element in range(N*N):
                         for row in range(N):
-                            if row == str(move)[-3]:
-                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])], grid[row][(column+1)%N][element][int(str(move)[-1])+1]))
+                            if str(row) == str(move)[-3]:
+                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])-1], grid[row][(column+1)%N][element][int(str(move)[-1])]))
                             else:
-                                actual_move.append(grid[row][column][element][int(str(move)[-1])] == grid[row][(column+1)%N][element][int(str(move)[-1])+1])
+                                actual_move.append(grid[row][column][element][int(str(move)[-1])-1] == grid[row][column][element][int(str(move)[-1])])
             elif str(move)[:-4] == 'left':
                 for column in range(N):
                     for element in range(N*N):
                         for row in range(N):
-                            if row == str(move)[-3]:
-                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])], grid[row][(column-1)%N][element][int(str(move)[-1])+1]))
+                            if str(row) == str(move)[-3]:
+                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])-1], grid[row][(column-1)%N][element][int(str(move)[-1])]))
                             else:
-                                actual_move.append(grid[row][column][element][int(str(move)[-1])] == grid[row][(column-1)%N][element][int(str(move)[-1])+1])
+                                actual_move.append(grid[row][column][element][int(str(move)[-1])-1] == grid[row][column][element][int(str(move)[-1])])
             elif str(move)[:-4] == 'up':
                 for row in range(N):
                     for element in range(N*N):
                         for column in range(N):
-                            if column == str(move)[-3]:
-                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])], grid[(row+1)%N][column][element][int(str(move)[-1])+1]))
+                            if str(column) == str(move)[-3]:
+                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])-1], grid[(row+1)%N][column][element][int(str(move)[-1])]))
                             else:
-                                actual_move.append(grid[row][column][element][int(str(move)[-1])] == grid[(row+1)%N][column][element][int(str(move)[-1])+1])
+                                actual_move.append(grid[row][column][element][int(str(move)[-1])-1] == grid[row][column][element][int(str(move)[-1])])
             elif str(move)[:-4] == 'down':
                 for row in range(N):
                     for element in range(N*N):
                         for column in range(N):
-                            if column == str(move)[-3]:
-                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])], grid[(row-1)%N][column][element][int(str(move)[-1])+1]))
+                            if str(column) == str(move)[-3]:
+                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])-1], grid[(row-1)%N][column][element][int(str(move)[-1])]))
                             else:
-                                actual_move.append(grid[row][column][element][int(str(move)[-1])] == grid[(row-1)%N][column][element][int(str(move)[-1])+1])
+                                actual_move.append(grid[row][column][element][int(str(move)[-1])-1] == grid[row][column][element][int(str(move)[-1])])
             # Taking an AND of all the conditions to be taken care of in ONE MOVE
             constraints.append(Implies(move,And(actual_move)))
     return (And(constraints))

@@ -8,7 +8,7 @@ T = 0
 board = []
 moves = []
 
-debug = False # set this variable to True to output the board contents after each move
+debug = True # set this variable to True to output the board contents after each move
 
 with open(inputFileName) as input_file:
     firstLineProcessedFlag = False
