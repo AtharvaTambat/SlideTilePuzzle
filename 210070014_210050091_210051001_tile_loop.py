@@ -44,7 +44,7 @@ with open(file) as f:
 
 	# Adding goal constarints 
 	constraints.append(goal_constraints(grid,n,T))
-	print(constraints)
+	# print(constraints)
  
 # Set s to the required formula
 s = Solver()
@@ -54,7 +54,17 @@ x = s.check()
 print(x)
 if x == sat:
 	m = s.model()
-	print("The satisfying model:")
-	print(m)
+	# print("The satisfying model:")
+	# print(m)
+
+	# Output the moves
+	step_counter = 0
+	for individual_move_set in move:
+		if m[Bool("finished_at_" + str(step_counter))]:
+			break
+		for individual_move in individual_move_set:
+			if m[individual_move]:
+				print(str(individual_move)[-3] + str(individual_move)[0])
+		step_counter+=1
 	
-# Output the moves
+
