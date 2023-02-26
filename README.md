@@ -1,2 +1,2 @@
-# Slide_Tile_Puzzle
+# Slide Tile Puzzle
 SAT Solver for sliding tile puzzle game
