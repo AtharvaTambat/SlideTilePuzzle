@@ -49,13 +49,24 @@ with open(file) as f:
 # Set s to the required formula
 s = Solver()
 s.add(And(constraints))
-
+# print("Hello1")
 x = s.check()
+# print("Hello")
 print(x)
 if x == sat:
 	m = s.model()
 	# print("The satisfying model:")
 	# print(m)
+	# print(m[Bool('finished_at_0')])
+	# print(m[Bool('finished_at_1')])
+	# print(m[Bool('finished_at_2')])
+	# print(m[Bool('finished_at_3')])
+	# print("final variables")
+	# print(m[Bool('p_0_0_1_3')])
+	# print(m[Bool('p_0_1_2_3')])
+	# print(m[Bool('p_0_2_3_3')])
+	# print(m[Bool('p_1_0_4_3')])
+	# print(m[Bool('p_1_1_5_3')])
 
 	# Output the moves
 	step_counter = 0
@@ -64,7 +75,8 @@ if x == sat:
 			break
 		for individual_move in individual_move_set:
 			if m[individual_move]:
-				print(str(individual_move)[-3] + str(individual_move)[0])
+				# print(individual_move)
+				print(str(individual_move).split("_")[1] + str(individual_move)[0])
 		step_counter+=1
 	
 

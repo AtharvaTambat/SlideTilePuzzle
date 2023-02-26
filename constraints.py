@@ -39,38 +39,38 @@ def move_constraints(grid,moves, N, max_steps):
     for step in moves: # Skip the last step - No move possible from the last step
         for move in step:
             actual_move = []
-            if str(move)[:-4] == 'right':
+            if str(move).split("_")[0] == 'right':
                 for column in range(N):
                     for element in range(N*N):
                         for row in range(N):
-                            if str(row) == str(move)[-3]:
-                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])-1], grid[row][(column+1)%N][element][int(str(move)[-1])]))
+                            if str(row) == str(move).split("_")[1]:
+                                actual_move.append(Implies(grid[row][column][element][int(str(move).split("_")[2])-1], grid[row][(column+1)%N][element][int(str(move).split("_")[2])]))
                             else:
-                                actual_move.append(grid[row][column][element][int(str(move)[-1])-1] == grid[row][column][element][int(str(move)[-1])])
-            elif str(move)[:-4] == 'left':
+                                actual_move.append(grid[row][column][element][int(str(move).split("_")[2])-1] == grid[row][column][element][int(str(move).split("_")[2])])
+            elif str(move).split("_")[0] == 'left':
                 for column in range(N):
                     for element in range(N*N):
                         for row in range(N):
-                            if str(row) == str(move)[-3]:
-                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])-1], grid[row][(column-1)%N][element][int(str(move)[-1])]))
+                            if str(row) == str(move).split("_")[1]:
+                                actual_move.append(Implies(grid[row][column][element][int(str(move).split("_")[2])-1], grid[row][(column-1)%N][element][int(str(move).split("_")[2])]))
                             else:
-                                actual_move.append(grid[row][column][element][int(str(move)[-1])-1] == grid[row][column][element][int(str(move)[-1])])
-            elif str(move)[:-4] == 'up':
+                                actual_move.append(grid[row][column][element][int(str(move).split("_")[2])-1] == grid[row][column][element][int(str(move).split("_")[2])])
+            elif str(move).split("_")[0] == 'up':
                 for row in range(N):
                     for element in range(N*N):
                         for column in range(N):
-                            if str(column) == str(move)[-3]:
-                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])-1], grid[(row+1)%N][column][element][int(str(move)[-1])]))
+                            if str(column) == str(move).split("_")[1]:
+                                actual_move.append(Implies(grid[row][column][element][int(str(move).split("_")[2])-1], grid[(row+1)%N][column][element][int(str(move).split("_")[2])]))
                             else:
-                                actual_move.append(grid[row][column][element][int(str(move)[-1])-1] == grid[row][column][element][int(str(move)[-1])])
-            elif str(move)[:-4] == 'down':
+                                actual_move.append(grid[row][column][element][int(str(move).split("_")[2])-1] == grid[row][column][element][int(str(move).split("_")[2])])
+            elif str(move).split("_")[0] == 'down':
                 for row in range(N):
                     for element in range(N*N):
                         for column in range(N):
-                            if str(column) == str(move)[-3]:
-                                actual_move.append(Implies(grid[row][column][element][int(str(move)[-1])-1], grid[(row-1)%N][column][element][int(str(move)[-1])]))
+                            if str(column) == str(move).split("_")[1]:
+                                actual_move.append(Implies(grid[row][column][element][int(str(move).split("_")[2])-1], grid[(row-1)%N][column][element][int(str(move).split("_")[2])]))
                             else:
-                                actual_move.append(grid[row][column][element][int(str(move)[-1])-1] == grid[row][column][element][int(str(move)[-1])])
+                                actual_move.append(grid[row][column][element][int(str(move).split("_")[2])-1] == grid[row][column][element][int(str(move).split("_")[2])])
             # Taking an AND of all the conditions to be taken care of in ONE MOVE
             constraints.append(Implies(move,And(actual_move)))
     return (And(constraints))
