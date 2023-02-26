@@ -1,12 +1,13 @@
 ### TEAM MEMBERS
 ## MEMBER 1: 210070014
-## MEMBER 2: 
-## MEMBER 3: <roll_number_3>
+## MEMBER 2: 210050091
+## MEMBER 3: 210051001
 
 
 from z3 import *
 import sys
 
+# Input file name
 file = sys.argv[1]
 
 with open(file) as f:
