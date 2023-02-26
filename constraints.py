@@ -25,16 +25,27 @@ def sum_eq_one(vars):
     return PbEq(tuple([(i,1) for i in vars]), 1)
 
 '''Creates clauses for constraining the valid moves at each step'''
-def move_constraints(grid,move, N, max_steps):
+def move_constraints(grid,moves, N, max_steps):
     constraints = []
 
     # Adds the constraints sum right_i_step + left_i_step + up_i_step + dpown_i_n = 1 => only one step moving one row/ column left/right/up/down should be done in a move
     for i in range(max_steps):
-        constraints.append(sum_eq_one(move[i]))
+        constraints.append(sum_eq_one(moves[i]))
     # print(constraints)
 
     # Adding constraints for if a move is chosen from amoung right, left .. - ensuring the validity of the next state
-    # TODO
+    for step in moves:
+        for move in step:
+            if str(move)[:-4] == 'right':
+                pass
+            elif str(move)[:-4] == 'left':
+                pass
+            elif str(move)[:-4] == 'up':
+                pass
+            elif str(move)[:-4] == 'down':
+                pass
+
+    
 
     return (And(constraints))
 
