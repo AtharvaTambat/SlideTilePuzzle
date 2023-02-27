@@ -72,8 +72,10 @@ def move_constraints(grid,moves, N, max_steps):
     return (And(constraints))
 
 
+
 def goal_constraints(grid, N, max_steps):
     constraints = []
+    finished_stages = []
 
     for step_count in range(max_steps+1): # step_count also includes 0 => the starting configuration is correct
         finish_at_step_i = []
@@ -84,13 +86,16 @@ def goal_constraints(grid, N, max_steps):
                 finish_at_step_i.append(grid[row][column][step_count] == element)
                 element+=1
 
-        constraints.append(And(finish_at_step_i))
+        finished_stage = Bool('finished_at_' + str(step_count))
+        finished_stages.append(finished_stage)
 
-    return(Or(constraints)) # Extra n Vars added to help check at the end, which is the lowest stage where the search was successful
+        constraints.append(finished_stage == And(finish_at_step_i))
+
+    return(And(And(constraints),Or(finished_stages))) # Extra n Vars added to help check at the end, which is the lowest stage where the search was successful
+
 
 # def goal_constraints(grid, N, max_steps):
 #     constraints = []
-#     finished_stages = []
 
 #     for step_count in range(max_steps+1): # step_count also includes 0 => the starting configuration is correct
 #         finish_at_step_i = []
@@ -101,9 +106,6 @@ def goal_constraints(grid, N, max_steps):
 #                 finish_at_step_i.append(grid[row][column][step_count] == element)
 #                 element+=1
 
-#         finished_stage = Bool('finished_at_' + str(step_count))
-#         finished_stages.append(finished_stage)
+#         constraints.append(And(finish_at_step_i))
 
-#         constraints.append(finished_stage == And(finish_at_step_i))
-
-#     return(And(And(constraints),Or(finished_stages))) # Extra n Vars added to help check at the end, which is the lowest stage where the search was successful
+#     return(Or(constraints)) # Extra n Vars added to help check at the end, which is the lowest stage where the search was successful
