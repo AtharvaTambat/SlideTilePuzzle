@@ -13,7 +13,7 @@ file = sys.argv[1]
 
 with open(file) as f:
 	n,T = [int(x) for x in next(f).split()]
-	grid = [ [ [ Int('p_'+str(row) + '_' + str(col) +  '_' + str(step)) for step in range(T+1)] for col in range(n) ] for row in range(n)]
+	grid = [ [ [ [ Bool('p_'+str(row) + '_' + str(col) + '_' + str(entry) + '_' + str(step)) for step in range(T+1)] for entry in range(1,n*n+1) ] for col in range(n) ] for row in range(n)]
 	# print(grid)
 	move = []
 	for move_count in range(1,T+1):
@@ -30,27 +30,29 @@ with open(file) as f:
 
 	row_count = 0
 	for line in f:
-		entry = [int(x) for x in line.split()]
+		row = [int(x) for x in line.split()]
 		for col_count in range(n):
-			constraints.append(grid[row_count][col_count][0] == entry[col_count]) # Adding the initial constraints 
+			constraints.append(grid[row_count][col_count][row[col_count]-1][0]) # Adding the initial constraints 
 		row_count+=1
 	# print(constraints)
 
 	# Adding consistency constraints for T steps
-	# constraints.append(consistency(grid,n,T))
+	constraints.append(consistency(grid,n,T))
 
-	# # Adding constraints for valid moves
+	# Adding constraints for valid moves
 	constraints.append(move_constraints(grid, move, n, T))
 
 	# Adding goal constarints 
 	constraints.append(goal_constraints(grid,n,T))
-	# print(constraints)
+	
 	
  
 # Set s to the required formula
 s = Solver()
 s.add(And(constraints))
+# print("Hello1")
 x = s.check()
+# print("Hello")
 
 print(x)
 if x == sat:
