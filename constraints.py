@@ -69,6 +69,20 @@ def move_constraints(grid,moves, N, max_steps):
                             actual_move.append(grid[row][column][int(str(move).split("_")[2])-1] == grid[row][column][int(str(move).split("_")[2])])
             # Taking an AND of all the conditions to be taken care of in ONE MOVE
             constraints.append(Implies(move,And(actual_move)))
+
+
+    # Optimization - Right at step i will not cause left at step i+1 - of the same row, column ...
+    for step_num in range(len(moves)-1): # Skip the last step - No move possible from the last step
+        for move_num in range(4*N):
+            if str(moves[step_num][move_num]).split("_")[0] == 'right':
+                constraints.append(Implies(moves[step_num][move_num],Not(Bool('left_' + str(moves[step_num][move_num]).split('_')[1]+ '_' + str(step_num + 2)))))
+            if str(moves[step_num][move_num]).split("_")[0] == 'left':
+                constraints.append(Implies(moves[step_num][move_num],Not(Bool('right_' + str(moves[step_num][move_num]).split('_')[1]+ '_' + str(step_num + 2)))))
+            if str(moves[step_num][move_num]).split("_")[0] == 'up':
+                constraints.append(Implies(moves[step_num][move_num],Not(Bool('down_' + str(moves[step_num][move_num]).split('_')[1]+ '_' + str(step_num + 2)))))
+            if str(moves[step_num][move_num]).split("_")[0] == 'down':
+                constraints.append(Implies(moves[step_num][move_num],Not(Bool('up_' + str(moves[step_num][move_num]).split('_')[1]+ '_' + str(step_num + 2)))))
+
     return (And(constraints))
 
 

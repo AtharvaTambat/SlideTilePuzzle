@@ -13,7 +13,7 @@ file = sys.argv[1]
 
 with open(file) as f:
 	n,T = [int(x) for x in next(f).split()]
-	grid = [ [ [ Int('p_'+str(row) + '_' + str(col) +  '_' + str(step)) for step in range(T+1)] for col in range(n) ] for row in range(n)]
+	grid = [ [ [ BitVec('p_'+str(row) + '_' + str(col) +  '_' + str(step),32) for step in range(T+1)] for col in range(n) ] for row in range(n)]
 	# print(grid)
 	move = []
 	for move_count in range(1,T+1):
