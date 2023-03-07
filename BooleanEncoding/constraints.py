@@ -36,7 +36,6 @@ def move_constraints(grid,moves, N, max_steps):
     # Enforcing move constraints between step 0 (initial state) and the first state (after one operation)
 
     # Adding constraints for if a move is chosen from amoung right, left .. - ensuring the validity of the next state
-    # print('moves array',moves)
     for step in moves: # Skip the last step - No move possible from the last step
         for move in step:
             actual_move = []
@@ -76,6 +75,7 @@ def move_constraints(grid,moves, N, max_steps):
             constraints.append(Implies(move,And(actual_move)))
     return (And(constraints))
 
+'''Adds the constraints which need to be satisfied at the end'''
 def goal_constraints(grid, N, max_steps):
     constraints = []
     finished_stages = []
